@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -67,3 +67,16 @@ class Certificado(Base):
 
     participante = relationship("Participante", back_populates="certificados")
     curso = relationship("Curso", back_populates="certificados")
+
+
+class Auditoria(Base):
+    __tablename__ = "auditoria"
+
+    id = Column(Integer, primary_key=True)
+    tabla = Column(String(100), nullable=False)
+    accion = Column(String(50), nullable=False)  # CREATE, UPDATE, DELETE
+    registro_id = Column(Integer)
+    datos_anteriores = Column(JSON)
+    datos_nuevos = Column(JSON)
+    usuario = Column(String(255), default="sistema")
+    timestamp = Column(DateTime, default=datetime.utcnow)
